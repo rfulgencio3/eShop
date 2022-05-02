@@ -1,4 +1,4 @@
-using eShop.ProductAPI.Contect;
+using eShop.ProductAPI.Context;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,7 +12,7 @@ builder.Services.AddSwaggerGen();
 
 var connection = builder.Configuration.GetConnectionString("DefaultConnection");
 
-builder.Services.AddDbContext<Context>(options =>
+builder.Services.AddDbContext<AppDbContext>(options =>
             options.UseMySql(connection, ServerVersion.AutoDetect(connection)));
 
 var app = builder.Build();
