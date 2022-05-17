@@ -5,7 +5,7 @@ namespace eShop.ProductAPI.DTOs
 {
     public class ProductDTO
     {
-        public int ProductId { get; private set; }
+        public int ProductId { get; set; }
         [Required(ErrorMessage = "The Name is required")]
         [MinLength(3)]
         [MaxLength(100)]
