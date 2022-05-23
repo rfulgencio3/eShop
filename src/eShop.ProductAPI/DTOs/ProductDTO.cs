@@ -21,6 +21,7 @@ namespace eShop.ProductAPI.DTOs
         [Range(1,9999)]
         public long Stock { get; private set; }
         public string? ImageUrl { get; private set; }
+        public string? CategoryName { get; set; }
 
         [JsonIgnore]
         public Category? Category { get; private set; }

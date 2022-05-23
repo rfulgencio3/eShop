@@ -30,17 +30,17 @@ namespace eShop.ProductAPI.Repository
 
         public async Task<IEnumerable<Product>> GetAll()
         {
-            return await _context.Products.ToListAsync();
+            return await _context.Products.Include(c => c.Category).ToListAsync();
         }
 
         public async Task<Product> GetById(int id)
         {
-            return await _context.Products.Where(p => p.ProductId == id).SingleOrDefaultAsync();
+            return await _context.Products.Include(c => c.Category).Where(p => p.ProductId == id).SingleOrDefaultAsync();
         }
 
         public async Task<Product> GetByName(string name)
         {
-            return await _context.Products.Where(p => p.Name == name).SingleOrDefaultAsync();
+            return await _context.Products.Include(c => c.Category).Where(p => p.Name == name).SingleOrDefaultAsync();
         }
 
         public async Task<Product> Update(Product product)

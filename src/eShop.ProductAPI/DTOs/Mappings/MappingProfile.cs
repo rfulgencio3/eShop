@@ -8,7 +8,9 @@ namespace eShop.ProductAPI.DTOs.Mappings
         public MappingProfile()
         {
             CreateMap<Category, CategoryDTO>().ReverseMap();
-            CreateMap<Product, ProductDTO>().ReverseMap();
+            CreateMap<Product, ProductDTO>();
+            CreateMap<Product, ProductDTO>()
+                .ForMember(c => c.CategoryName, options => options.MapFrom(src => src.Category.Name));
 
         }
     }
