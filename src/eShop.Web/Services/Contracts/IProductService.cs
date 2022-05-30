@@ -9,6 +9,6 @@ namespace eShop.Web.Services.Contracts
         Task<ProductViewModel> GetProductByName(string name);  
         Task<ProductViewModel> CreateProduct(ProductViewModel product);
         Task<ProductViewModel> UpdateProduct(ProductViewModel product);
-        Task<bool> DeleteProduct(int id);
+        Task<bool> DeleteProductById(int id);
     }
 }

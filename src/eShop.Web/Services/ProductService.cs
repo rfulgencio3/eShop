@@ -1,6 +1,6 @@
-﻿using eShop.ProductAPI.DTOs;
-using eShop.ProductAPI.Services;
-using eShop.Web.Models;
+﻿using eShop.Web.Models;
+using eShop.Web.Services.Contracts;
+using System.Text;
 using System.Text.Json;
 
 namespace eShop.Web.Services
@@ -18,34 +18,124 @@ namespace eShop.Web.Services
             _options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
         }
 
-        public Task AddProduct(ProductDTO productDTO)
+        public async Task<IEnumerable<ProductViewModel>> GetAllProducts()
         {
-            throw new NotImplementedException();
+            var client = _clientFactory.CreateClient("ProductAPI");
+            using (var response = await client.GetAsync(apiEndpoint))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    var apiResponse = await response.Content.ReadAsStreamAsync();
+                    productsViewModel = await JsonSerializer
+                                        .DeserializeAsync<IEnumerable<ProductViewModel>>(apiResponse, _options);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            return productsViewModel;
         }
 
-        public Task<ProductDTO> GetProductById(int id)
+        public async Task<ProductViewModel> GetProductById(int id)
         {
-            throw new NotImplementedException();
+            var client = _clientFactory.CreateClient("ProductAPI");
+
+            using (var response = await client.GetAsync(apiEndpoint + id))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    var apiResponse = await response.Content.ReadAsStreamAsync();
+                    productViewModel = await JsonSerializer
+                                        .DeserializeAsync<ProductViewModel>(apiResponse, _options);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            return productViewModel;
         }
 
-        public Task<ProductDTO> GetProductByName(string name)
+        public async Task<ProductViewModel> GetProductByName(string name)
         {
-            throw new NotImplementedException();
+            var client = _clientFactory.CreateClient("ProductAPI");
+
+            using (var response = await client.GetAsync(apiEndpoint + name))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    var apiResponse = await response.Content.ReadAsStreamAsync();
+                    productViewModel = await JsonSerializer
+                                        .DeserializeAsync<ProductViewModel>(apiResponse, _options);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            return productViewModel;
         }
 
-        public Task<IEnumerable<ProductDTO>> GetProducts()
+        public async Task<ProductViewModel> CreateProduct(ProductViewModel productViewModel)
         {
-            throw new NotImplementedException();
+            var client = _clientFactory.CreateClient("ProductAPI");
+
+            StringContent content = new StringContent(JsonSerializer.Serialize(productViewModel),
+                                    Encoding.UTF8, "application/json");
+
+            using (var response = await client.PostAsync(apiEndpoint, content))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    var apiResponse = await response.Content.ReadAsStreamAsync();
+                    productViewModel = await JsonSerializer
+                                        .DeserializeAsync<ProductViewModel>(apiResponse, _options);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            return productViewModel;
+        }
+        public async Task<ProductViewModel> UpdateProduct(ProductViewModel productViewModel)
+        {
+            var client = _clientFactory.CreateClient("ProductAPI");
+            ProductViewModel productUdated = new ProductViewModel();
+
+            using (var response = await client.PutAsJsonAsync(apiEndpoint, productViewModel))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    var apiResponse = await response.Content.ReadAsStreamAsync();
+                    productUdated = await JsonSerializer
+                                    .DeserializeAsync<ProductViewModel>(apiResponse, _options);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            return productUdated;
         }
 
-        public Task RemoveProduct(int id)
+        public async Task<bool> DeleteProductById(int id)
         {
-            throw new NotImplementedException();
-        }
+            var client = _clientFactory.CreateClient("ProductAPI");
 
-        public Task UpdateProduct(ProductDTO productDTO)
-        {
-            throw new NotImplementedException();
+            using (var response = await client.DeleteAsync(apiEndpoint + id))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            return false;
         }
     }
 }

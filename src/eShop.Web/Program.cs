@@ -1,3 +1,6 @@
+using eShop.Web.Services;
+using eShop.Web.Services.Contracts;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -7,6 +10,8 @@ builder.Services.AddHttpClient("ProductAPI", c =>
 {
     c.BaseAddress = new Uri(builder.Configuration["ServiceUri:ProductAPI"]);
 });
+
+builder.Services.AddScoped<IProductService, ProductService>();
 
 var app = builder.Build();
 
