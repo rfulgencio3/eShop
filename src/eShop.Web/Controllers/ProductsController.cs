@@ -75,5 +75,25 @@ namespace eShop.Web.Controllers
             }
             return View(productViewModel);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> DeleteProduct(int id)
+        {
+            var result = await _productService.GetProductById(id);
+
+            if (result is null) return View("Error");
+
+            return View(result);
+        }
+
+        [HttpPost(), ActionName("DeleteProduct")]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var result = await _productService.DeleteProductById(id);
+
+            if (!result) return View("Error");
+
+            return RedirectToAction("Index");
+        }
     }
 }
