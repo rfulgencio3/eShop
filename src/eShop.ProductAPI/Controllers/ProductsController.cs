@@ -52,10 +52,9 @@ namespace eShop.ProductAPI.Controllers
             return new CreatedAtRouteResult("GetProductById", new { id = productDTO.ProductId }, productDTO);
         }
 
-        [HttpPut("{id:int}")]
-        public async Task<ActionResult> Put(int id, [FromBody] ProductDTO productDTO)
+        [HttpPut()]
+        public async Task<ActionResult> Put([FromBody] ProductDTO productDTO)
         {
-            if (id != productDTO.CategoryId) return StatusCode(400, "INVALID_PRODUCT_ID");
             if (productDTO is null) return StatusCode(400, "INVALID_DATA");
 
             await _productService.UpdateProduct(productDTO);
