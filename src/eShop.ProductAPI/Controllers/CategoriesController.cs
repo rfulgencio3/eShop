@@ -1,11 +1,14 @@
 ﻿using eShop.ProductAPI.DTOs;
+using eShop.ProductAPI.Roles;
 using eShop.ProductAPI.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace eShop.ProductAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class CategoriesController : ControllerBase
     {
         private readonly ICategoryService _categoryService;
@@ -73,6 +76,7 @@ namespace eShop.ProductAPI.Controllers
         }
 
         [HttpDelete("{id:int}")]
+        [Authorize(Roles = Role.Admin)]
         public async Task<ActionResult<CategoryDTO>> Delete(int id)
         {
             var categoryDTO = await _categoryService.GetCategoryById(id);
